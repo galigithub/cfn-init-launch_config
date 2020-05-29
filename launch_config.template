@@ -167,37 +167,17 @@ Resources:
       GroupDescription: Enable SSH & HTTPD
       SecurityGroupIngress:
       - IpProtocol: tcp
-        FromPort: '0'
-        ToPort: '65535'
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
         CidrIp: 0.0.0.0/0      
       VpcId: !Ref myDemoVPC
 
   LaunchConfigStage:
      Type: AWS::AutoScaling::LaunchConfiguration
-     Metadata:
-       AWS::CloudFormation::Init:
-         configSets:
-           InstallAndRun: [ "Install" ]
-         Install:
-           Packages:
-             yum:
-               java-1.8.0-openjdk-devel: []
-               tomcat: []
-               httpd : []
-           services:
-             sysvinit:
-               httpd:
-                 enabled: true
-                 ensureRunning: true
-               tomcat:
-                 enabled: true
-                 ensureRunning: true
-           files:
-             /usr/share/tomcat/webapps/HelloWorld.jar:
-               source: https://java-application-sample-jarfile.s3-us-west-2.amazonaws.com/HelloWorld.jar
-               mode: '000666'
-               owner: root
-               group: root
      Properties:
         KeyName: !Ref KeyName
         ImageId: "ami-0d6621c01e8c2de2c"
@@ -207,22 +187,12 @@ Resources:
         UserData:
            Fn::Base64:
              !Sub |
-               #!/bin/bash -xe
-               yum install -y aws-cfn-bootstrap
-               /opt/aws/bin/cfn-init -v
-                  --stack ${AWS::StackName}
-                  --resource AutoScalingGroup
-                  --configsets InstallAndRun
-                  --region ${AWS::Region}                  
-               /opt/aws/bin/cfn-signal -e $?
-                  --stack ${AWS::StackName}
-                  --resource AutoScalingGroup
-                  --region ${AWS::Region}
-     CreationPolicy:
-       ResourceSignal:
-         Timeout: PT5M             
-        
-  
+               #!/bin/bash -x
+               yum install httpd -y
+               systemctl start httpd.service
+               systemctl enable httpd.service
+               echo "Hello from Shiva" > /var/www/html/index.html
+     
   MyLoadBalancer:
      Type: AWS::ElasticLoadBalancing::LoadBalancer
      Properties:
@@ -230,10 +200,10 @@ Resources:
         Subnets: [ { "Ref" : "pubSubnet" } ]
         Listeners:
            - Protocol: http
-             LoadBalancerPort: 8080
-             InstancePort: 8080
+             LoadBalancerPort: 80
+             InstancePort: 80
         HealthCheck:
-           Target: http:8080/
+           Target: http:80/
            HealthyThreshold: '2'
            UnhealthyThreshold: '2'
            Interval: '30'
