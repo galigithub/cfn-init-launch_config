@@ -167,21 +167,9 @@ Resources:
       GroupDescription: Enable SSH & HTTPD
       SecurityGroupIngress:
       - IpProtocol: tcp
-        FromPort: '22'
-        ToPort: '22'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: '80'
-        ToPort: '80'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: '8080'
-        ToPort: '8080'
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: http
-        FromPort: '8080'
-        ToPort: '8080'
-        CidrIp: 0.0.0.0/0        
+        FromPort: '0'
+        ToPort: '65535'
+        CidrIp: 0.0.0.0/0      
       VpcId: !Ref myDemoVPC
 
   LaunchConfigStage:
@@ -245,7 +233,7 @@ Resources:
              LoadBalancerPort: 8080
              InstancePort: 8080
         HealthCheck:
-           Target: http:80/
+           Target: http:8080/
            HealthyThreshold: '2'
            UnhealthyThreshold: '2'
            Interval: '30'
