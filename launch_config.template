@@ -242,8 +242,8 @@ Resources:
         Subnets: [ { "Ref" : "pubSubnet" } ]
         Listeners:
            - Protocol: http
-             LoadBalancerPort: 80
-             InstancePort: 80
+             LoadBalancerPort: 8080
+             InstancePort: 8080
         HealthCheck:
            Target: http:80/
            HealthyThreshold: '2'
