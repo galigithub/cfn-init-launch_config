@@ -28,6 +28,7 @@ node {
         echo "file_name ${buildVersionNumber}"
     }
     
+    /*
     stage('Gradle Build') {
         try {
             echo 'Build Started'
@@ -64,7 +65,7 @@ node {
         sh "echo sudo ls -la /opt/tomcat/latest/webapps/ >> ./user_data"
         sh "cat user_data"
     }
-    
+    */
     stage('create launch configuration') {
         infraNumber = env.BUILD_NUMBER + '-' + SHORT_GIT_COMMIT
         sh "/usr/bin/ansible-playbook provision.yml --extra-vars=\"stack_name=cnf-stack-${infraNumber}\"  --vault-password-file=\"/home/rajgali83/pass.txt\""
