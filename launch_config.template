@@ -197,7 +197,7 @@ Resources:
                  enabled: true
                  ensureRunning: true
            files:
-             /usr/share/tomcat/webapps/HelloWorld.jar
+             /usr/share/tomcat/webapps/HelloWorld.jar:
                source: https://java-application-sample-jarfile.s3-us-west-2.amazonaws.com/HelloWorld.jar
                mode: '000500'
                owner: root
