@@ -178,6 +178,30 @@ Resources:
 
   LaunchConfigStage:
      Type: AWS::AutoScaling::LaunchConfiguration
+     Metadata:
+       AWS::CloudFormation::Init:
+         configSets:
+           InstallAndRun: [ "Install" ]
+         Install:
+           Packages:
+             yum:
+               java-1.8.0-openjdk-devel: []
+               tomcat: []
+               httpd : []
+           services:
+             sysvinit:
+               httpd:
+                 enabled: true
+                 ensureRunning: true
+               tomcat:
+                 enabled: true
+                 ensureRunning: true
+           files:
+             /usr/share/tomcat/webapps/HelloWorld.jar
+               source: https://java-application-sample-jarfile.s3-us-west-2.amazonaws.com/HelloWorld.jar
+               mode: '000500'
+               owner: tomcat
+               group: tomcat
      Properties:
         KeyName: !Ref KeyName
         ImageId: "ami-0d6621c01e8c2de2c"
