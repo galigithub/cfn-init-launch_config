@@ -164,7 +164,7 @@ Resources:
   WebSecGrp:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable SSH & HTTPD
+      GroupDescription: Enable HTTPD
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: '22'
