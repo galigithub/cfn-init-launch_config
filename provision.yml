@@ -18,12 +18,13 @@
              #pubSubnetCIDR: 10.10.12.0/25
              privAvailabilityZone: us-west-2c
              #privSubnetCIDR: 10.10.12.128/25
-             InstanceName: 'shivainfra' 
+             InstanceName: "Instance-{{ stack_name }}"
              #InstanceType: t2.micro
              KeyName: awscf
              MaxSizeASG: 1
              MinSizeASG: 1
              DesiredCapacityASG: 1
+             AsgGroupName: "asg-{{ stack_name }}"
              #InstancePublicIP: "True"
              #InstanceAMI: "ami-0d6621c01e8c2de2c"
              
