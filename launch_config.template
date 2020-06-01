@@ -176,7 +176,8 @@ Resources:
         CidrIp: 0.0.0.0/0      
       VpcId: !Ref myDemoVPC
   
-  Type: AWS::AutoScaling::LaunchConfiguration
+  LaunchConfigStage:
+     Type: AWS::AutoScaling::LaunchConfiguration
      Metadata:
        AWS::CloudFormation::Init:
          configSets:
@@ -224,6 +225,7 @@ Resources:
      CreationPolicy:
        ResourceSignal:
          Timeout: PT5M             
+
      
   MyLoadBalancer:
      Type: AWS::ElasticLoadBalancing::LoadBalancer
