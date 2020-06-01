@@ -61,7 +61,11 @@ Parameters:
     Type: String
   DesiredCapacityASG:
     Description: "Enter the desired capacity for the ASG"
-    Type: String  
+    Type: String
+    
+  AsgGroupName:
+    Description: "Auto scaling group name"
+    Type: String
 
 Mappings:
   RegionMap: 
@@ -247,7 +251,7 @@ Resources:
   AutoScalingGroup:
      Type: AWS::AutoScaling::AutoScalingGroup
      Properties:
-        AutoScalingGroupName: Shiva Cfn AutoScalingGroup
+        AutoScalingGroupName: !Ref AsgGroupName
         AvailabilityZones: [ { "Ref" : "pubAvailabilityZone" } ] 
         DesiredCapacity: !Ref DesiredCapacityASG
         Cooldown: 120
@@ -255,12 +259,7 @@ Resources:
         LoadBalancerNames : [ { "Ref" : "MyLoadBalancer" } ]
         MaxSize: !Ref MaxSizeASG
         MinSize: !Ref MinSizeASG
-        VPCZoneIdentifier: [ { "Ref" : "pubSubnet" } ]
-        Tags:
-           -
-              Key: type
-              Value: shiva_cfn_asg
-              PropagateAtLaunch: true  
+        VPCZoneIdentifier: [ { "Ref" : "pubSubnet" } ] 
               
 Outputs:
    AutoscalingGroupDetails:
