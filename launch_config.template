@@ -260,7 +260,36 @@ Resources:
         MaxSize: !Ref MaxSizeASG
         MinSize: !Ref MinSizeASG
         VPCZoneIdentifier: [ { "Ref" : "pubSubnet" } ] 
-              
+  
+  ScaleUpPolicy:
+     Type: AWS::AutoScaling::ScalingPolicy
+     Properties:
+        AdjustmentType: "ChangeInCapacity"
+        AutoScalingGroupName: { "Ref" : "AutoScalingGroup" }
+        Cooldown: "600"
+        ScalingAdjustment: 1
+  
+  ScaleDownPolicy:
+     Type: AWS::AutoScaling::ScalingPolicy
+     Properties:
+        AdjustmentType: "ChangeInCapacity"
+        AutoScalingGroupName: { "Ref" : "AutoScalingGroup" }
+        Cooldown: "600"
+        ScalingAdjustment: "-1"
+  
+  CPUAlarmHigh:
+     Type: AWS::CloudWatch::Alarm
+     Properties:
+        EvaluationPeriods: 1
+        Statistic: "Average"
+        Threshold: 90
+        AlarmDescription: "CPU usage"
+        Period: 60
+        AlarmActions: [ { "Ref": "ScaleUpPolicy" } ]
+        Namespace: "AWS/EC2"
+        
+  
+        
 Outputs:
    AutoscalingGroupDetails:
      Description: "The newly created asg"
